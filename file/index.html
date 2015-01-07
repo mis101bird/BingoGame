@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+      <meta charset = "utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>登入</title>
+	  <script src = "http://code.createjs.com/createjs-2013.12.12.min.js"></script>
+	  <link href="css/animate.min.css" rel="stylesheet">
+	  <link href="css/reset.css" rel="stylesheet" />
+	  <style type = "text/css">
+    
+       body { 
+				background: black;
+			}
+		#login {
+				position: absolute;
+				top: 25%;
+				left: 0;
+				right: 0;
+				margin:auto;
+				color: white;
+				font-family: Comic Sans MS,cursive,sans-serif;
+				font-size: 40px;
+			
+			}	
+	   input {
+				border: 3px solid white; 
+				background: black; 
+				-moz-border-radius:10px; 
+				-webkit-border-radius: 10px; 
+				border-radius: 10px; 
+				height: 30px;
+				color: white;
+				font-family: Comic Sans MS,cursive,sans-serif;
+				font-size: 20px;
+				padding: 5px;
+				margin: 10px;
+			}
+			
+		input[type="submit"]
+		{
+			width: 250px;
+			height: 55px;
+			font-size: 30px;
+			transition: all 0.5s;
+		}
+		
+		input[type="submit"]:hover
+		{
+			border: 3px solid black; 
+			color: black;
+			background: white;
+		}
+		
+		#wrong {
+					color: red;
+					font-size: 20px;
+			   }
+	  </style>
+   </head>
+   <body>
+     <script>
+      function check()
+      {
+      var xmlhttp;
+      if (window.XMLHttpRequest)
+      { // code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+        
+      xmlhttp.onreadystatechange=function(){
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+       {
+         var response=xmlhttp.responseText; //responseXLM別用~常有問題
+         var data=JSON.parse(response);
+         if( data.message=="error password" ){
+          document.getElementById("wrong").innerHTML="Please try again your password!";
+         }else if( data.message=="error nickname" ){
+             alert("已經幫您建了新帳號!");
+			       document.location.href="smart1/"+data.id ; //把畫面導到其他網頁
+		     
+         }else if(data.message=="get id"){
+            document.location.href="smart1/"+data.id ;
+         }
+        
+      }
+    }
+    var s=document.getElementById("login")[0].value;
+    var s1=document.getElementById("login")[1].value; //變數要額外隔出來，不要直接放send內
+    xmlhttp.open("POST","logback.js",true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send("nickname="+s+"&password="+s1); //固定形式
+    }
+    
+    </script>
+     
+   <form name="login" id="login" action="javascript:check()" align = "center" method="post"/>
+	<div class = "bounceInLeft animated">Nickname:<input type="text" name="nickname" id = "nickname" size = "20" autofocus required /></div><br />
+	<div class = "bounceInRight animated">Password:<input type="password" name="password" id = "password" size = "20" required /></div><br />
+	<input type="submit" value="Login" class = "bounceIn animated"/><br />
+	<div id="wrong"></div>
+	</form>
+   </body>
+</html>

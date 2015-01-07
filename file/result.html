@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+      <meta charset = "utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>score</title>
+	  <script src = "http://code.createjs.com/createjs-2013.12.12.min.js"></script>
+    <script src='http://libs.baidu.com/jquery/1.9.0/jquery.min.js'></script> 
+	  <link href="css/animate.min.css" rel="stylesheet">
+	  <link href="css/reset.css" rel="stylesheet" />
+	  <style type = "text/css">
+       body { 
+				background: black;
+			}
+		
+		div {
+				color: white;
+				font-family: Comic Sans MS,cursive,sans-serif;
+				font-size: 50px;
+		
+			}
+			
+		table {
+				border:white 3px solid; 
+				width: 50%;
+				
+				position: absolute;
+				top: 100px;
+				left: 0;
+				right: 0;
+				margin: auto;
+				z-index: 50;
+				
+			  }
+			  
+		tr {
+			border:white 3px solid;
+			
+		   }
+	  </style>
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	  <script src = "http://code.createjs.com/createjs-2013.12.12.min.js"></script>
+	  <script src = "js/total.js"></script>
+	  <script language="JavaScript"> 
+    var data=getparam();
+	  $(document).ready(function() {
+	  createjs.Sound.registerSound("win.mp3","win");
+	  createjs.Sound.play("win", createjs.Sound.INTERRUPT_ANY, 0, 0, -1, 1, 0);
+	
+      var xmlhttp;
+      if (window.XMLHttpRequest)
+      { // code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+      }
+      else
+      {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      }
+        
+      xmlhttp.onreadystatechange=function(){
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+       {
+         document.getElementById("load").innerHTML="";
+         var response=xmlhttp.responseText; //responseXLM別用~常有問題
+         var person=JSON.parse(response); 
+        
+		     var html = '<table>';
+    var data=getparam();		
+		for(var i = 0; i<person.length; i++)
+		{
+      if(person[i].account==data['nick']){
+        $("#add").addClass("bounceInRight animated").text("your score:"+person[i].score );
+        html += '<tr style="color:red">';
+			html += '<td>' + (i+1)+ 'st </td>' + '<td>' + person[i].account + '</td>' + '<td>' + person[i].score + '</td>' ;
+			html += "</tr>";
+        
+      }else{
+        
+			html += '<tr>';
+			html += '<td>' + (i+1) + 'st </td>' + '<td>' + person[i].account + '</td>' + '<td>' + person[i].score + '</td>' ;
+			
+			html += "</tr>";
+      		
+		}
+      }
+         $(html).appendTo('div');
+         html += '</table>';
+    }
+    
+      }
+	  xmlhttp.open("GET","resultback.js" ,true);
+    xmlhttp.send();
+	  });
+	  		function getparam()
+    {
+        var strUrl = location.search;
+        var getPara, ParaVal;
+        var aryPara = [];
+        if (strUrl.indexOf("?") != -1) {
+        var getSearch = strUrl.split("?");
+        getPara = getSearch[1].split("&");
+        for (i = 0; i < getPara.length; i++) {
+        ParaVal = getPara[i].split("=");
+        aryPara.push(ParaVal[0]);
+        aryPara[ParaVal[0]] = ParaVal[1];
+          }
+        return aryPara;
+        }
+    }
+	  </script>
+   </head>
+   <body>
+	<div id = "add"></div>
+	<span class="loader" id= "load">
+		<span class="text" id="word">Wait</span><br/>
+		<span class="spinner"></span>
+  </span>    
+   </body>
+</html>
